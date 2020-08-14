@@ -1,11 +1,14 @@
 package com.github.tunabel.sbmsbeerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tunabel.sbmsbeerservice.bootstrap.BeerLoader;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerDto;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerStyleEnum;
+import com.github.tunabel.sbmsbeerservice.web.services.BeerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,8 +27,12 @@ class BeerControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @MockBean
+    BeerService beerService;
+
     @Test
     void getBeerById() throws Exception {
+
 
         mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID().toString()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -50,7 +57,7 @@ class BeerControllerTest {
                 .beerName("Testing beer")
                 .beerStyle(BeerStyleEnum.ALE)
                 .price(BigDecimal.valueOf(1.99))
-                .upc(101L)
+                .upc(BeerLoader.BEER_3_UPC)
                 .build();
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
 
