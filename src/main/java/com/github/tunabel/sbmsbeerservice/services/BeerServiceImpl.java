@@ -8,6 +8,7 @@ import com.github.tunabel.sbmsbeerservice.web.model.BeerDto;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerPagedList;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,12 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
+    @Cacheable(cacheNames = "beerCache", key="#beerID", condition = "#showInventoryOnHand == false")
     @Override
     public BeerDto getById(UUID beerID, Boolean showInventoryOnHand) {
+
+        System.out.println("I was called");
+
         if (!showInventoryOnHand) {
             return beerMapper.mapBeerToDto(beerRepository.findById(beerID).orElseThrow(NotFoundException::new));
         }
@@ -48,8 +53,12 @@ public class BeerServiceImpl implements BeerService {
         return beerMapper.mapBeerToDtoWithInv(beerRepository.save(beerMapper.mapDtoToBeerWithInv(beerDto)));
     }
 
+    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false")
     @Override
     public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
+
+        System.out.println("I was called for cache");
+
         BeerPagedList beerPagedList;
         Page<Beer> beerPage;
 
