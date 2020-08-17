@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tunabel.sbmsbeerservice.bootstrap.BeerLoader;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerDto;
 import com.github.tunabel.sbmsbeerservice.web.model.BeerStyleEnum;
-import com.github.tunabel.sbmsbeerservice.web.services.BeerService;
+import com.github.tunabel.sbmsbeerservice.services.BeerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -1,5 +1,6 @@
 package com.github.tunabel.sbmsbeerservice.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +16,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class BeerDto {
+
     @Null
-    private UUID beerID;
+    private UUID id;
 
     @Null
     private Integer version;
 
     @Null
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ssZ", shape=JsonFormat.Shape.STRING)
     private OffsetDateTime createdDate;
+
     @Null
-    private OffsetDateTime modifiedDate;
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ssZ", shape=JsonFormat.Shape.STRING)
+    private OffsetDateTime lastModifiedDate;
 
     @NotBlank
     private String beerName;
@@ -32,12 +37,13 @@ public class BeerDto {
     @NotNull
     private BeerStyleEnum beerStyle;
 
-    @NotBlank
+    @NotNull
     private String upc;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Positive
     @NotNull
-    BigDecimal price;
+    private BigDecimal price;
 
     private Integer quantityOnHand;
 }
