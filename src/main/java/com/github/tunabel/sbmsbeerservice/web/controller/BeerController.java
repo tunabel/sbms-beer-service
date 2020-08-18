@@ -35,7 +35,7 @@ public class BeerController {
         }
 
 
-        if (pageNumber == null || pageNumber < 0 ) {
+        if (pageNumber == null || pageNumber < 0) {
             pageNumber = DEFAULT_PAGE_NUMBER;
         }
 
@@ -47,6 +47,8 @@ public class BeerController {
 
         return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
+
+
 
     @GetMapping("/{beerID}")
     public ResponseEntity<BeerDto> get(@Valid @PathVariable UUID beerID,
