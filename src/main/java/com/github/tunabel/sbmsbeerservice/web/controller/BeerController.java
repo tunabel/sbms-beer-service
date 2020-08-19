@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/beer")
+@RequestMapping("/api/v1/")
 public class BeerController {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
@@ -24,7 +24,7 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @GetMapping(value = "/all", produces = {"application/json"})
+    @GetMapping(value = "beer", produces = {"application/json"})
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
@@ -50,7 +50,7 @@ public class BeerController {
 
 
 
-    @GetMapping("/{beerID}")
+    @GetMapping("beer/{beerID}")
     public ResponseEntity<BeerDto> get(@Valid @PathVariable UUID beerID,
                                        @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand) {
         if (showInventoryOnHand == null) {
@@ -60,16 +60,28 @@ public class BeerController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @PutMapping("/{beerID}")
+    @PutMapping("beer/{beerID}")
     public ResponseEntity update(@PathVariable UUID beerID, @Valid @RequestBody BeerDto beerDto) {
         beerService.updateBeer(beerID, beerDto);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping
+    @PostMapping("beer")
     public ResponseEntity create(@RequestBody BeerDto beerDto) {
         beerService.saveNewBeer(beerDto);
         return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @GetMapping("beerUpc/{beerUpc}")
+    public ResponseEntity<BeerDto> getByUPC(@PathVariable(value="beerUpc") String upc,
+                                            @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand) {
+
+        if (showInventoryOnHand == null) {
+            showInventoryOnHand = false;
+        }
+        BeerDto dto = beerService.getByUpc(upc, showInventoryOnHand);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+
     }
 }
